@@ -1,11 +1,11 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Activities } from "./activities";
-import { CreateActivityModal } from "./create-activity-modal";
 import { DestinationDateHeader } from "./destination-date-header";
 import { Guests } from "./guests";
 import { ImportantLinks } from "./important-links";
 import { Button } from "../../components/button";
+import { CreateActivityModal } from "./modals/create-activity-modal";
 
 export function TripDetailsPage() {
 

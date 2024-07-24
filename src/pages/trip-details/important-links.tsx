@@ -1,8 +1,10 @@
-import { Link2, Plus } from "lucide-react";
-import { Button } from "../../components/button";
-import { useState, useEffect } from "react";
+import { Pencil, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button } from "../../components/button";
 import { api } from "../../lib/axios";
+import { CreateLinkModal } from "./modals/create-link-modal";
+import { UpdateLinkModal } from "./modals/update-link-modal";
 
 interface Link {
   id: string
@@ -15,15 +17,40 @@ export function ImportantLinks() {
 
   const { id } = useParams()
   const [links, setLinks] = useState<Link[]>([])
+  const [isRegisterLinkModalOpen, setIsRegisterLinkModalOpen] = useState(false)
+  const [isUpdateLinkModalOpen, setIsUpdateLinkModalOpen] = useState(false)
+  const [modalKey, setModalKey] = useState<string | null>(null);
+
 
   useEffect(() => {
     api.get(`/trips/${id}/links`).then(response => {
      setLinks(response.data)
-     console.log(response.data);
-     
-    }
+      }
     )
   }, [id])
+
+  function openRegisterLinkModal() {
+    setIsRegisterLinkModalOpen(true)
+  }
+
+  function closeRegisterLinkModal() {
+    setIsRegisterLinkModalOpen(false)
+  }
+  function openUpdateLinkModal() {
+    setIsUpdateLinkModalOpen(true)
+  }
+
+  function closeUpdateLinkModal() {
+    setIsUpdateLinkModalOpen(false)
+  }
+
+  function handleButtonClick(key: string) {
+    setModalKey(key)        
+  }
+
+  function registerLink() {
+
+  }
   
   return (
     <div className="space-y-6">
@@ -39,16 +66,24 @@ export function ImportantLinks() {
                           {link.url}
                         </a>
                       </div>
-                    <Link2 className="text-zinc-400 size-5 shrink-0"/>
+                    <button onClick={() => {
+                      handleButtonClick(link.id)
+                      openUpdateLinkModal()
+                    }}>
+                      <Pencil className="text-zinc-400 size-5 shrink-0"/>
+                    </button>
                 </div>
                   ))
                 )}
             </div>
 
-            <Button variant="secondary" size="full">
+            <Button variant="secondary" size="full" type="submit" onClick={openRegisterLinkModal}>
              Cadastrar novo link
               <Plus className='size-5' />
             </Button>
+
+            {isRegisterLinkModalOpen && <CreateLinkModal closeRegisterLinkModal={closeRegisterLinkModal}/>}
+            {isUpdateLinkModalOpen && <UpdateLinkModal closeUpdateLinkModal={closeUpdateLinkModal} modalKey={modalKey}/>}
           </div>
   )
 }
