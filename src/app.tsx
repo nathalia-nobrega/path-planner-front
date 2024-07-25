@@ -2,21 +2,34 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import PrivateRoute from "./auth/privateRoute";
 import { CreateTripPage } from "./pages/create-trip";
-import { TripDetailsPage } from "./pages/trip-details";
+import { AuthProvider } from "./auth/authContext";
 
 export function App() {
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <CreateTripPage />
+      element: (
+        <PrivateRoute>
+          <CreateTripPage />
+        </PrivateRoute>
+      ),
     },
     {
-      path: "/trips/:id",
-      element: <TripDetailsPage />,
+      path: "/auth/login",
+      element: (
+        <div>
+          <h1>esta eh a pagina de loginnnn</h1>
+        </div>
+      ),
     },
   ]);
-  return <RouterProvider router={router} />
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }
 
