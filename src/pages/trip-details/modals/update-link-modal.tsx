@@ -10,7 +10,7 @@ interface UpdateLinkModalProps {
 }
 
 export function UpdateLinkModal({ closeUpdateLinkModal, modalKey }: UpdateLinkModalProps) {
-  const { id } = useParams()
+  const { tripId } = useParams()
 
   async function updateLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -20,21 +20,13 @@ export function UpdateLinkModal({ closeUpdateLinkModal, modalKey }: UpdateLinkMo
     const title = data.get('title')?.toString()
     const url = data.get('url')?.toString()
 
-    await api.put(`/trips/${id}/links/${modalKey}`, {
+    await api.put(`/trips/${tripId}/links/${modalKey}`, {
       title,
       url
     })
 
     window.document.location.reload()
   }
-
-  async function deleteLink(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    console.log(modalKey);
-    
-    await api.delete(`/trips/${id}/links/${modalKey}`)    
-    window.document.location.reload()
-}
 
   return (
     <div className='fixed inset-0 bg-black/60 flex items-center justify-center'>
@@ -75,13 +67,6 @@ export function UpdateLinkModal({ closeUpdateLinkModal, modalKey }: UpdateLinkMo
                     </Button>
                   </div>
                 </form>
-
-
-                <form onSubmit={deleteLink} className="flex items-center justify-center">
-                    <button type="submit" className="bg-red-500 rounded-lg px-5 py-2 font-medium flex items-center justify-center gap-2">
-                      Excluir link?
-                    </button>
-                 </form>
             </div>
           </div>
   )

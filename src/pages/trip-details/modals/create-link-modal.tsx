@@ -1,5 +1,5 @@
 import { Link, Tag, X } from "lucide-react";
-import { FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../../components/button";
 import { api } from "../../../lib/axios";
@@ -9,7 +9,7 @@ interface CreateLinkModalProps {
 }
 
 export function CreateLinkModal({ closeRegisterLinkModal }: CreateLinkModalProps) {
-  const { id } = useParams()
+  const { tripId } = useParams()
 
   async function registerLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -19,7 +19,7 @@ export function CreateLinkModal({ closeRegisterLinkModal }: CreateLinkModalProps
     const title = data.get('title')?.toString()
     const url = data.get('url')?.toString()
 
-    await api.post(`/trips/${id}/links`, {
+    await api.post(`/trips/${tripId}/links`, {
       title,
       url
     }).then(response => console.log(response))

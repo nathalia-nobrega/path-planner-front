@@ -14,7 +14,7 @@ interface Activity {
 }
 
 export function Activities() {
-  const { id } = useParams()
+  const { tripId } = useParams()
   const [activities, setActivities] = useState<Activity[]>([])
   const [isDeleteActivityModalOpen,setIsDeleteActivityModalOpen ] = useState(false)
   const [isUpdateActivityModalOpen, setIsUpdateActivityModalOpen ] = useState(false)
@@ -22,11 +22,12 @@ export function Activities() {
 
 
   useEffect(() => {
-    api.get(`/trips/${id}/activities`).then(response => {
-     setActivities(response.data)
-    }
+    api.get(`/trips/${tripId}/activities`).then(response => {
+    console.log(response);  
+    setActivities(response.data)
+      }
     )
-  }, [id])
+  }, [tripId])
 
 
   function openDeleteActivityModal() {
@@ -84,7 +85,7 @@ export function Activities() {
       </div>
 
     {isDeleteActivityModalOpen && <DeleteActivityModal modalKey={modalKey} closeCreateActivityModal={closeDeleteActivityModal} />}
-    {isUpdateActivityModalOpen && <UpdateActivityModal modalKey={modalKey} closeUpdateActivityModal={closeDeleteActivityModal} />}
+    {isUpdateActivityModalOpen && <UpdateActivityModal modalKey={modalKey} closeUpdateActivityModal={closeUpdateActivityModal} />}
     </>
   )
 }

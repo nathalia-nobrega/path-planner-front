@@ -12,17 +12,17 @@ interface Guest {
 }
 
 export function Guests() {
-  const { id } = useParams()
+  const { tripId } = useParams()
   const [guests, setGuests] = useState<Guest[]>([])
 
   useEffect(() => {
-    api.get(`/trips/${id}/participants`).then(response => {
+    api.get(`/trips/${tripId}/participants`).then(response => {
      setGuests(response.data)
      console.log(response.data);
      
     }
     )
-  }, [id])
+  }, [tripId])
   return (
     <div className="space-y-6">
             <h2 className="font-semibold text-xl">Convidados</h2>

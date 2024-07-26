@@ -45,6 +45,7 @@ export function DestinationAndDateStep({
         type="text" 
         placeholder="Para onde você vai?" 
         className="bg-transparent text-lg outline-none placeholder-zinc-400"
+        required
         onChange={event => setDestination(event.target.value)}
         />
         </div>

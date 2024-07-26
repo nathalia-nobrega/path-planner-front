@@ -5,6 +5,9 @@ import {
 import PrivateRoute from "./auth/privateRoute";
 import { CreateTripPage } from "./pages/create-trip";
 import { AuthProvider } from "./auth/authContext";
+import LoginPage from "./pages/login-register/LoginPage";
+import { TripDetailsPage } from "./pages/trip-details";
+import RegisterPage from "./pages/login-register/RegisterPage";
 
 export function App() {
 
@@ -19,10 +22,18 @@ export function App() {
     },
     {
       path: "/auth/login",
+      element: <LoginPage/>,
+    },
+    {
+      path: "/auth/register",
+      element: <RegisterPage />,
+    },
+    {
+      path: "/trips/:tripId",
       element: (
-        <div>
-          <h1>esta eh a pagina de loginnnn</h1>
-        </div>
+        <PrivateRoute>
+          <TripDetailsPage />
+        </PrivateRoute>
       ),
     },
   ]);

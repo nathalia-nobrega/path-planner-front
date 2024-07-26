@@ -9,12 +9,12 @@ interface DeleteActivityModalProps {
 }
 
 export function DeleteActivityModal({ closeCreateActivityModal, modalKey }: DeleteActivityModalProps) {
-  const { id } = useParams()
+  const { tripId } = useParams()
 
   async function deleteActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    await api.delete(`/trips/${id}/activities/${modalKey}`)    
+    await api.delete(`/trips/${tripId}/activities/${modalKey}`)    
     window.document.location.reload()
 }
 

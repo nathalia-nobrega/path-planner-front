@@ -12,7 +12,7 @@ interface CreateActivityModalProps {
 }
 
 export function CreateActivityModal({ closeCreateActivityModal }: CreateActivityModalProps) {
-  const { id } = useParams()
+  const { tripId } = useParams()
   const[startDate, setStartDate] = useState<Date>(new Date())
   const[endDate, setEndDate] = useState<Date>(new Date())
 
@@ -38,7 +38,7 @@ export function CreateActivityModal({ closeCreateActivityModal }: CreateActivity
   // get the start and end date for the trip
 
   useEffect(() => {
-    api.get(`/trips/${id}`).then(response => {
+    api.get(`/trips/${tripId}`).then(response => {
      const  { endsAt, startsAt } = response.data
      const starts_at = new Date(startsAt)
      const ends_at = new Date(endsAt)
@@ -47,7 +47,7 @@ export function CreateActivityModal({ closeCreateActivityModal }: CreateActivity
     setEndDate(ends_at)
     }
     )
-  }, [id])
+  }, [tripId])
 
   const getLocalDateTime = () => {
     if (activityDate && timeValue) {
@@ -76,8 +76,9 @@ export function CreateActivityModal({ closeCreateActivityModal }: CreateActivity
     const title = data.get('title')?.toString()  
      
     const occurs_at = getLocalDateTime()
+    
 
-    await api.post(`/trips/${id}/activities`, {
+    await api.post(`/trips/${tripId}/activities`, {
       title,
       occurs_at
     })
@@ -145,11 +146,7 @@ export function CreateActivityModal({ closeCreateActivityModal }: CreateActivity
             <div className="mx-auto">
               <label className="block mb-2 text-md text-gray-900 dark:text-white">Select time:</label>
               <div className="relative">
-                  <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                          <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
-                      </svg>
-                  </div>
+                  
                   <input type="time" onChange={handleTimeChange}
                   className="bg-gray-50 border 
                   leading-none border-gray-300 

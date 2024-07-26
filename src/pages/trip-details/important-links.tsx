@@ -15,7 +15,7 @@ interface Link {
 
 export function ImportantLinks() {
 
-  const { id } = useParams()
+  const { tripId } = useParams()
   const [links, setLinks] = useState<Link[]>([])
   const [isRegisterLinkModalOpen, setIsRegisterLinkModalOpen] = useState(false)
   const [isUpdateLinkModalOpen, setIsUpdateLinkModalOpen] = useState(false)
@@ -23,11 +23,11 @@ export function ImportantLinks() {
 
 
   useEffect(() => {
-    api.get(`/trips/${id}/links`).then(response => {
+    api.get(`/trips/${tripId}/links`).then(response => {
      setLinks(response.data)
       }
     )
-  }, [id])
+  }, [tripId])
 
   function openRegisterLinkModal() {
     setIsRegisterLinkModalOpen(true)

@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogin = async (email: string, password: string) => {
     const response = await login(email, password)
+    
     setToken(response.token)
     setEmail(getUserEmail())
   }
