@@ -1,9 +1,15 @@
+import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
+import axios from 'axios';
 import { format } from 'date-fns';
 import { ArrowRight, Calendar, MapPin, Settings2, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Button } from "../../../components/button";
+
+// Google Places API config
+const libraries: ('places')[] = ['places'];
+const GOOGLE_API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY
 
 interface DestinationAndDateStepProps {
   isGuestsInputOpen: boolean
@@ -23,6 +29,9 @@ export function DestinationAndDateStep({
   eventStartEndDates
 } : DestinationAndDateStepProps) {
 
+  const [suggestions, setSuggestions] = useState<google.maps.places.PlaceResult[]>([]);
+  const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
+
   const [isDatePickerOpen, setIsDatePickerOpen ] = useState(false)
   const displayedDate = eventStartEndDates && eventStartEndDates.from && eventStartEndDates.to
   ? format(eventStartEndDates.from, "dd 'de' LLL").concat(' até ').concat(format(eventStartEndDates.to, "dd 'de' LLL"))
@@ -36,18 +45,58 @@ export function DestinationAndDateStep({
     setIsDatePickerOpen(false)
   }
 
+  /* This function handles the search for the places based on
+  *  the user's query every time the user selects a query
+  */
+  function handlePlaceChanged() {
+    
+    if (searchBoxRef.current) {
+      const places = searchBoxRef.current.getPlaces()
+      if (places && places.length > 0) {
+        const place = places[0]
+        setDestination(place.formatted_address || "")
+        fetchSuggestions(place.geometry?.location)        
+      }
+    }
+  }
+
+  /* This function in being used to fetch possible tourist attractions.
+  * It will be used later to generate a custom page of recommendations for the user.
+  */
+  async function fetchSuggestions(location: google.maps.LatLng | undefined) {
+    if (location) {
+      const { lat, lng } = location.toJSON()
+      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=tourist_attraction&key=${GOOGLE_API_KEY}`;
+      
+      try {
+        const response = await axios.get(url)
+        setSuggestions(response.data.results)
+        console.log(`Sugestões para ${location}:\n ${suggestions}`);
+        
+      } catch (error) {
+        console.error("Error fetching suggestions: ", error);
+      }
+
+    }
+  }
+
   return (
     <div className="h-16 px-4 bg-zinc-900 rounded-xl flex items-center shadow-shape gap-3">
         <div className='flex flex-1 items-center gap-2'>
         <MapPin className='size-5 text-zinc-400'/>
-        <input 
-        disabled={isGuestsInputOpen} 
-        type="text" 
-        placeholder="Para onde você vai?" 
-        className="bg-transparent text-lg outline-none placeholder-zinc-400"
-        required
-        onChange={event => setDestination(event.target.value)}
-        />
+        <LoadScript googleMapsApiKey={GOOGLE_API_KEY} libraries={libraries}>
+          <StandaloneSearchBox
+          onPlacesChanged={handlePlaceChanged}
+          onLoad={ref => (searchBoxRef.current = ref)}>
+            <input 
+            disabled={isGuestsInputOpen} 
+            type="text" 
+            placeholder="Para onde você vai"
+            className="bg-transparent text-lg outline-none placeholder-zinc-400"
+            required
+          />
+          </StandaloneSearchBox>
+        </LoadScript>
         </div>
 
         <button className='flex items-center gap-2 text-left w-[240px]' disabled={isGuestsInputOpen} onClick={openDatePicker}>
