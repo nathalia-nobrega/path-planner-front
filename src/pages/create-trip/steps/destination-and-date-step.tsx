@@ -1,11 +1,12 @@
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
-import axios from 'axios';
 import { format } from 'date-fns';
 import { ArrowRight, Calendar, MapPin, Settings2, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Button } from "../../../components/button";
+import { useSuggestions } from '../../../components/context/SuggestionsContex';
+import { fetchSuggestions } from '../../../services/suggestionsService';
 
 // Google Places API config
 const libraries: ('places')[] = ['places'];
@@ -29,9 +30,9 @@ export function DestinationAndDateStep({
   eventStartEndDates
 } : DestinationAndDateStepProps) {
 
-  const [suggestions, setSuggestions] = useState<google.maps.places.PlaceResult[]>([]);
   const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
-
+  const { setSuggestions } = useSuggestions();
+  
   const [isDatePickerOpen, setIsDatePickerOpen ] = useState(false)
   const displayedDate = eventStartEndDates && eventStartEndDates.from && eventStartEndDates.to
   ? format(eventStartEndDates.from, "dd 'de' LLL").concat(' até ').concat(format(eventStartEndDates.to, "dd 'de' LLL"))
@@ -49,34 +50,21 @@ export function DestinationAndDateStep({
   *  the user's query every time the user selects a query
   */
   function handlePlaceChanged() {
-    
     if (searchBoxRef.current) {
-      const places = searchBoxRef.current.getPlaces()
+      const places = searchBoxRef.current.getPlaces();
       if (places && places.length > 0) {
-        const place = places[0]
-        setDestination(place.formatted_address || "")
-        fetchSuggestions(place.geometry?.location)        
+        const place = places[0];
+        setDestination(place.formatted_address || '');
+        const location = place.geometry?.location;
+        if (location) {
+          fetchSuggestions(location.lat(), location.lng(), GOOGLE_API_KEY)
+            .then(results => {
+              setSuggestions(results)
+              console.log(results);
+            })
+            .catch(error => console.error('Error fetching suggestions:', error));
+        }
       }
-    }
-  }
-
-  /* This function in being used to fetch possible tourist attractions.
-  * It will be used later to generate a custom page of recommendations for the user.
-  */
-  async function fetchSuggestions(location: google.maps.LatLng | undefined) {
-    if (location) {
-      const { lat, lng } = location.toJSON()
-      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=tourist_attraction&key=${GOOGLE_API_KEY}`;
-      
-      try {
-        const response = await axios.get(url)
-        setSuggestions(response.data.results)
-        console.log(`Sugestões para ${location}:\n ${suggestions}`);
-        
-      } catch (error) {
-        console.error("Error fetching suggestions: ", error);
-      }
-
     }
   }
 
@@ -139,12 +127,11 @@ export function DestinationAndDateStep({
           <Settings2 className='size-5' />
         </Button>
       ):  (
-      <Button onClick={openGuestsInput} variant="primary">
-      Continuar
-    <ArrowRight className='size-5'/>
-    </Button>
+          <Button onClick={openGuestsInput} variant="primary">
+          Continuar
+           <ArrowRight className='size-5'/>
+          </Button>
     )}
-    
   </div>
   )
 }

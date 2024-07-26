@@ -8,6 +8,8 @@ import { AuthProvider } from "./auth/authContext";
 import LoginPage from "./pages/login-register/LoginPage";
 import { TripDetailsPage } from "./pages/trip-details";
 import RegisterPage from "./pages/login-register/RegisterPage";
+import { SuggestionsProvider } from "./components/context/SuggestionsContex";
+import { PlaceSuggestions } from "./pages/place-details/placeSuggestions";
 
 export function App() {
 
@@ -36,10 +38,20 @@ export function App() {
         </PrivateRoute>
       ),
     },
+    {
+      path: "/trips/:tripId/place-suggestions",
+      element: (
+        <PrivateRoute>
+          <PlaceSuggestions />
+        </PrivateRoute>
+      ),
+    },
   ]);
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <SuggestionsProvider>
+        <RouterProvider router={router} />
+      </SuggestionsProvider>
     </AuthProvider>
   )
 }

@@ -39,22 +39,15 @@ export function CreateTripPage() {
 
 
   async function createTrip(event: FormEvent<HTMLFormElement>) {
+    console.log('criano');
+    
     const email = getUserEmail()?.sub
     
     event.preventDefault()
 
-    // Melhorar validação
-    if (!destination) {
-      return 
-    }
-
     if (!eventStartEndDates?.from || !eventStartEndDates.to) {
       return
     }
-
-    if (emailsToInvite.length === 0){
-      return 
-    }    
 
      const response = await api.post('/trips', {
       destination,
@@ -64,8 +57,6 @@ export function CreateTripPage() {
       owner_email: email,
       owner_name: ownerName
     })
-
-    
     const { tripId } = response.data        
     
     navigate(`/trips/${tripId}`)
@@ -129,15 +120,6 @@ export function CreateTripPage() {
       closeGuestsModal={closeGuestsModal}/>
     )}
 
-      {/* {isConfirmTripModalOpen && (
-            <ConfirmTripModal 
-            addNewEmailToInvite={addNewEmailToInvite}
-            closeConfirmTripModal={closeConfirmTripModal}
-            createTrip={createTrip}
-            setOwnerName={setOwnerName}
-            setOwnerEmail={setOwnerEmail}
-            />
-      )} */}
     </div>
   )
 }
