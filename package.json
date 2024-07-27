@@ -30,6 +30,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
     "react-time-picker": "^7.0.0",
+    "redux-persist": "^6.0.0",
     "styled-components": "^6.1.12",
     "tailwind-variants": "^0.2.1",
     "ts-node": "^10.9.2"

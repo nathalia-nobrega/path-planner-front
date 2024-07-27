@@ -48,7 +48,6 @@ export const getUserEmail = () => {
   const token = localStorage.getItem('token');
   if (token) {
     console.log(jwtDecode<string>(token));
-    const { sub } = jwtDecode<TokenResponse>(token)
     return jwtDecode<TokenResponse>(token)
   }
   return null

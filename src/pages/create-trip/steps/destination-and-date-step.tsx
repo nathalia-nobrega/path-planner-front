@@ -56,7 +56,6 @@ export function DestinationAndDateStep({
           fetchSuggestions(location.lat(), location.lng(), GOOGLE_API_KEY)
             .then(results => {
               setSuggestions(results)
-              console.log(results);
             })
             .catch(error => console.error('Error fetching suggestions:', error));
         }

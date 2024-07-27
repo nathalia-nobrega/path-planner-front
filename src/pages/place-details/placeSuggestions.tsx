@@ -3,9 +3,7 @@ import { useSuggestions } from "../../components/context/SuggestionsContex";
 export function PlaceSuggestions() {
   const GOOGLE_API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY
 
-  const { suggestions } = useSuggestions();  
-  console.log(suggestions);
-  
+  const { suggestions } = useSuggestions();    
  
    return (
     <div className="bg-zinc-950">

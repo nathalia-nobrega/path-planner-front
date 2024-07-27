@@ -7,6 +7,7 @@ import { Activities } from "./activities";
 import { DestinationDateHeader } from "./destination-date-header";
 import { ImportantLinks } from "./important-links";
 import { CreateActivityModal } from "./modals/create-activity-modal";
+import { ImportantItems } from "./items";
 
 export function TripDetailsPage() {
 
@@ -60,8 +61,9 @@ export function TripDetailsPage() {
             </button>
           </div>
           <div className='w-full h-px bg-zinc-800 ' />
-          <ImportantLinks />
+          <ImportantItems />
           <div className='w-full h-px bg-zinc-800 ' />
+          <ImportantLinks />
         </div>
       </main>
 
