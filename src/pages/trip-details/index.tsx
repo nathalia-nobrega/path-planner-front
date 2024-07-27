@@ -5,7 +5,6 @@ import { Button } from "../../components/button";
 import { api } from "../../lib/axios";
 import { Activities } from "./activities";
 import { DestinationDateHeader } from "./destination-date-header";
-import { Guests } from "./guests";
 import { ImportantLinks } from "./important-links";
 import { CreateActivityModal } from "./modals/create-activity-modal";
 
@@ -50,7 +49,6 @@ export function TripDetailsPage() {
               Cadastrar atividade
             </Button>
           </div>
-
           <Activities />
         </div>
 
@@ -64,7 +62,6 @@ export function TripDetailsPage() {
           <div className='w-full h-px bg-zinc-800 ' />
           <ImportantLinks />
           <div className='w-full h-px bg-zinc-800 ' />
-          <Guests />
         </div>
       </main>
 

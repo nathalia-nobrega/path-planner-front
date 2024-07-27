@@ -47,10 +47,6 @@ export function ImportantLinks() {
   function handleButtonClick(key: string) {
     setModalKey(key)        
   }
-
-  function registerLink() {
-
-  }
   
   return (
     <div className="space-y-6">

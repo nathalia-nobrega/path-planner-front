@@ -1,7 +1,7 @@
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { format } from 'date-fns';
-import { ArrowRight, Calendar, MapPin, Settings2, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowRight, Calendar, MapPin, X } from "lucide-react";
+import { FormEvent, useRef, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { Button } from "../../../components/button";
@@ -13,18 +13,14 @@ const libraries: ('places')[] = ['places'];
 const GOOGLE_API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY
 
 interface DestinationAndDateStepProps {
-  isGuestsInputOpen: boolean
-  closeGuestsInput: () => void
-  openGuestsInput: () => void
+  createTrip: (event: FormEvent<HTMLFormElement>) => Promise<void>
   setDestination: (destination: string) => void
   setEventStartEndDates: (dates: DateRange | undefined) => void
   eventStartEndDates: DateRange | undefined
 }
 
 export function DestinationAndDateStep({
-  isGuestsInputOpen,
-  closeGuestsInput,
-  openGuestsInput,
+  createTrip,
   setDestination,
   setEventStartEndDates,
   eventStartEndDates
@@ -70,14 +66,13 @@ export function DestinationAndDateStep({
 
   return (
     <div className="h-16 px-4 bg-zinc-900 rounded-xl flex items-center shadow-shape gap-3">
-        <div className='flex flex-1 items-center gap-2'>
+        <div className='flex flex-1 items-center gap-2 truncate'>
         <MapPin className='size-5 text-zinc-400'/>
         <LoadScript googleMapsApiKey={GOOGLE_API_KEY} libraries={libraries}>
           <StandaloneSearchBox
           onPlacesChanged={handlePlaceChanged}
           onLoad={ref => (searchBoxRef.current = ref)}>
             <input 
-            disabled={isGuestsInputOpen} 
             type="text" 
             placeholder="Para onde você vai"
             className="bg-transparent text-lg outline-none placeholder-zinc-400"
@@ -87,7 +82,7 @@ export function DestinationAndDateStep({
         </LoadScript>
         </div>
 
-        <button className='flex items-center gap-2 text-left w-[240px]' disabled={isGuestsInputOpen} onClick={openDatePicker}>
+        <button className='flex items-center gap-2 text-left w-[240px]' onClick={openDatePicker}>
           <Calendar className='size-5 text-zinc-400'/>
           <span className="text-lg placeholder-zinc-400  w-40 flex-1">
               {displayedDate || "Quando?"}
@@ -120,18 +115,12 @@ export function DestinationAndDateStep({
         )}
 
       <div className='w-px h-6 bg-zinc-800'/>
-
-      {isGuestsInputOpen ? (
-        <Button onClick={closeGuestsInput} variant="secondary">
-          Alterar local/data
-          <Settings2 className='size-5' />
-        </Button>
-      ):  (
-          <Button onClick={openGuestsInput} variant="primary">
-          Continuar
-           <ArrowRight className='size-5'/>
+        <form onClick={createTrip}>
+          <Button>
+              Confirmar viagem
+            <ArrowRight className='size-5'/>
           </Button>
-    )}
+        </form>
   </div>
   )
 }
