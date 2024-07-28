@@ -1,6 +1,8 @@
+import { ArrowRight, Lock, MailIcon, TextIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register, RegisterRequest } from '../../auth/authService';
+import { RegisterRequest, register } from '../../auth/authService';
+import { Button } from '../../components/button';
 
 const RegisterPage: React.FC = () => {
     const [fullName, setFullName] = useState('');
@@ -21,38 +23,57 @@ const RegisterPage: React.FC = () => {
         }
     };
     return (
-      <div>
-          <h1>Register</h1>
-          <form onSubmit={handleSubmit}>
-              <div>
-                  <label>Username</label>
-                  <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                  />
-              </div>
-              <div>
-                  <label>Email</label>
-                  <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                  />
-              </div>
-              <div>
-                  <label>Password</label>
-                  <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                  />
-              </div>
-              {error && <p>{error}</p>}
-              <button type="submit">Register</button>
-          </form>
-      </div>
-  );
+        <div className="h-screen flex items-center justify-center">
+            <div className="max-w-3xl w-full p-6 space-10 text-center">
+                <div className="p-8 bg-zinc-900 rounded-xl flex flex-col shadow-shape gap-4">
+                    <h2 className='text-zinc-300 font-semibold text-2xl'>Cadastro</h2>
+                    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+
+                    <div className='flex items-center justify-center gap-3 truncate'>
+                        <TextIcon className='size-5 text-zinc-400'/>
+                            <input 
+                            type="text" 
+                            value={fullName} 
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="Nome completo"
+                            className="bg-zinc-800 w-full p-3 rounded-md text-lg outline-none placeholder-zinc-400"
+                            required
+                        />
+                    </div>
+
+                    <div className='flex items-center justify-center gap-3 truncate'>
+                        <MailIcon className='size-5 text-zinc-400'/>
+                            <input 
+                            type="text" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="E-mail"
+                            className="bg-zinc-800 w-full p-3 rounded-md text-lg outline-none placeholder-zinc-400"
+                            required
+                        />
+                    </div>
+    
+                    <div className='flex items-center justify-center gap-3 truncate'>
+                        <Lock className='size-5 text-zinc-400'/>
+                        <input 
+                            type="password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Senha"
+                            className="bg-zinc-800 w-full rounded-md p-3 text-lg placeholder-zinc-400"
+                            required
+                        />
+                    </div>
+                        {error && <p>{error}</p>}
+                        <Button type='submit' size='full'>
+                            Completar cadastro
+                            <ArrowRight className='size-5'/>
+                        </Button>
+                    </form>
+                </div>
+            </div>
+        </div>
+       );
 };
 
 export default RegisterPage;

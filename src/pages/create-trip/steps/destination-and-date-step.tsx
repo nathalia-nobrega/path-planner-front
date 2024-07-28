@@ -120,6 +120,6 @@ export function DestinationAndDateStep({
             <ArrowRight className='size-5'/>
           </Button>
         </form>
-  </div>
+      </div>
   )
 }
