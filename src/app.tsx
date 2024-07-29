@@ -9,7 +9,7 @@ import LoginPage from "./pages/login-register/LoginPage";
 import { TripDetailsPage } from "./pages/trip-details";
 import RegisterPage from "./pages/login-register/RegisterPage";
 import { SuggestionsProvider } from "./components/context/SuggestionsContex";
-import { PlaceSuggestions } from "./pages/place-details/placeSuggestions";
+import { PlaceSuggestions } from "./pages/place-details/PlaceSuggestions";
 
 export function App() {
 

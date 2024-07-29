@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/button";
 import { api } from "../../lib/axios";
-import { CreateLinkModal } from "./modals/create-link-modal";
-import { UpdateLinkModal } from "./modals/update-link-modal";
+import { CreateLinkModal } from "./modals/CreateLinkModal";
+import { UpdateLinkModal } from "./modals/UpdateLinkModal";
 
 interface Link {
   id: string

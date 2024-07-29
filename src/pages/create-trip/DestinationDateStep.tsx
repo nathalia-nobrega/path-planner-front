@@ -4,9 +4,9 @@ import { ArrowRight, Calendar, MapPin, X } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { Button } from "../../../components/button";
-import { useSuggestions } from '../../../components/context/SuggestionsContex';
-import { fetchSuggestions } from '../../../services/suggestionsService';
+import { Button } from "../../components/button";
+import { useSuggestions } from '../../components/context/SuggestionsContex';
+import { fetchSuggestions } from '../../services/suggestionsService';
 
 // Google Places API config
 const libraries: ('places')[] = ['places'];
@@ -101,6 +101,11 @@ export function DestinationAndDateStep({
             </div>
             <DayPicker 
             mode="range" 
+            disabled= {
+              {
+                before: new Date()
+              }
+            }
             selected={eventStartEndDates} 
             onSelect={setEventStartEndDates} 
             classNames={{

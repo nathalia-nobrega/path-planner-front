@@ -5,11 +5,12 @@
  **/
 
 import { ReactNode, createContext, useContext, useState } from "react";
-import { getUserEmail, login, logout, setToken } from "./authService";
+import { LoginResponse, getUserEmail, login, logout, setToken } from "./authService";
+import { AxiosResponse } from "axios";
 
 interface AuthContextType {
   email: string | null,
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<AxiosResponse<LoginResponse, any>>
   logout: () => void
 }
 
@@ -21,8 +22,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const handleLogin = async (email: string, password: string) => {
     const response = await login(email, password)
     
-    setToken(response.token)
+    setToken(response.data.token)
     setEmail(getUserEmail())
+
+    return response
   }
 
   const handleLogout = () => {

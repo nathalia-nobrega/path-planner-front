@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/button";
 import { api } from "../../lib/axios";
-import { CreateItemModal } from "./modals/create-item-modal";
+import { CreateItemModal } from "./modals/CreateItemModal";
 
 interface Item {
   id: string

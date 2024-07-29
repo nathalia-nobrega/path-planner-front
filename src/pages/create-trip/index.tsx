@@ -3,7 +3,7 @@ import { DateRange } from 'react-day-picker'
 import { useNavigate } from 'react-router-dom'
 import { getUserEmail } from '../../auth/authService'
 import { api } from '../../lib/axios'
-import { DestinationAndDateStep } from './steps/destination-and-date-step'
+import { DestinationAndDateStep } from './DestinationDateStep'
 
 export function CreateTripPage() {
   const ownerName = localStorage.getItem('full_name')
@@ -37,8 +37,7 @@ export function CreateTripPage() {
     <div className="h-screen flex items-center justify-center">
       <div className="max-w-3xl w-full px-6 space-y-10 text-center">
       <div className='flex flex-col items-center gap-3'>
-        <img src="/logo.svg" alt="plann.er" />
-        <p className="text-zinc-300 text-lg">Planeje sua próxima viagem!</p>
+        <p className="text-zinc-950 font-bold text-3xl">Planeje sua próxima viagem!</p>
       </div>
 
     <div className='space-y-4'>

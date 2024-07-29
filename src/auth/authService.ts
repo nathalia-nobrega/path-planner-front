@@ -18,6 +18,7 @@ export interface TokenResponse {
 
 export interface LoginResponse {
   token: string
+  message: string
 }
 
 export interface RegisterRequest {
@@ -40,7 +41,7 @@ export const register = async (registerRequest: RegisterRequest) => {
 // Makes a request to the API (/auth/login) and expects the token as a response
 export const login = async (email: string, password: string) => {
   const response = await api.post<LoginResponse>(`${API_URL}/login`, { email, password })  
-  return response.data
+  return response
 }
 
 // Get's the token from Local Storage, decodes it and gets the user's email

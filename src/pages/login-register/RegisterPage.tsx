@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterRequest, register } from '../../auth/authService';
 import { Button } from '../../components/button';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from '../../types/errorResponse';
 
 const RegisterPage: React.FC = () => {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -17,9 +19,13 @@ const RegisterPage: React.FC = () => {
         try {
             await register(registerRequest);
             navigate('/auth/login'); // Redirect to login page after successful registration
-        } catch (error) {
-            setError('Registration failed. Please try again.');
-            console.error('Error registering:', error);
+        } catch (err) {
+            const error = err as AxiosError<ErrorResponse>
+            if (error.response && error.response.status === 409) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage('An unexpected error occurred.');
+            }
         }
     };
     return (
@@ -64,7 +70,7 @@ const RegisterPage: React.FC = () => {
                             required
                         />
                     </div>
-                        {error && <p>{error}</p>}
+                        {errorMessage && <p>{errorMessage}</p>}
                         <Button type='submit' size='full'>
                             Completar cadastro
                             <ArrowRight className='size-5'/>

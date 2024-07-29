@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/authContext';
 import { Button } from '../../components/button';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from '../../types/errorResponse';
 
 const LoginPage: React.FC = () => {
    const [email, setEmail] = useState('');
+   const [errorMessage, setErrorMessage] = useState<string>('');
+
    const [password, setPassword] = useState('');
    const { login } = useAuth();
    const navigate = useNavigate();
@@ -13,12 +17,17 @@ const LoginPage: React.FC = () => {
    const handleSubmit = async (event: React.FormEvent) => {
        event.preventDefault();
        try {
-           await login(email, password);
-           navigate('/');
-       } catch (error) {
-           console.error('Failed to login');
+        await login(email, password)
+        navigate('/')
+       } catch (err) {
+        const error = err as AxiosError<ErrorResponse>
+        if (error.response && error.response.status === 404) {
+            setErrorMessage(error.response.data.message);
+          } else {
+            setErrorMessage('An unexpected error occurred.');
+          }
        }
-   };
+    }
 
     function navigateToRegister(): void {
         navigate('/auth/register')
@@ -52,6 +61,7 @@ const LoginPage: React.FC = () => {
                         required
                     />
                 </div>
+                {errorMessage && <span className='text-red-500'>{errorMessage}</span>}
                 <form className='flex items-center justify-center w-full' onSubmit={handleSubmit}>
                     <Button type='submit' size='full'>
                         Entrar
